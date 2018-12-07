@@ -84,9 +84,7 @@ class GameBoard:
 	def validateMoveLevel(self, worker, row, col):
 		currentWorkerLevel = worker.level
 		moveLevel = self.gameBoard[row][col].level
-		if moveLevel == 4 or moveLevel - currentWorkerLevel > 1:
-			return False
-		return True
+		return moveLevel == 4 or moveLevel - currentWorkerLevel > 1
 
 
 	# Needs testing

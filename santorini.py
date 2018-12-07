@@ -30,4 +30,3 @@ if __name__ == '__main__':
 	
 	# Player1 builds
 	print('PLAYER 1: BUILD 1')
-	
