@@ -15,6 +15,7 @@ class GameBoard:
 		return gameBoard
 
 
+# Tests written
 	def getNeighboringPositions(self, workerPos):
 		possiblePositions = []
 		if self.validatePosition(workerPos.row - 1, workerPos.col):
@@ -36,10 +37,10 @@ class GameBoard:
 		return possiblePositions
 
 
-	# Needs testing
+# Tests written
 	def moveWorker(self, player, workerNum, row, col):
-		if self.workersWillCollide(row, col) == False and self.validateMoveLevel(player.workers[workerNum], row, col):
-			if [row, col] in self.getNeighboringPositions(player.workers[workerNum]):
+		if [row, col] in self.getNeighboringPositions(player.workers[workerNum]):
+			if self.workersWillCollide(row, col) == False and self.validateMoveLevel(player.workers[workerNum], row, col):
 				player.previousPositionWorker.row = player.workers[workerNum].row
 				player.previousPositionWorker.col = player.workers[workerNum].col
 				player.previousPositionWorker.level = player.workers[workerNum].level
@@ -53,7 +54,7 @@ class GameBoard:
 		return False
 
 
-	# Needs testing
+# Tests written
 	def placeInitialWorker(self, player, workerNum, row, col):
 		if self.workersWillCollide(row, col) == False and self.validatePosition(row, col):
 			player.previousPositionWorker.row = row
@@ -80,18 +81,18 @@ class GameBoard:
 		print()
 
 
-	# Needs testing
+# Tests written
 	def validateMoveLevel(self, worker, row, col):
 		currentWorkerLevel = worker.level
 		moveLevel = self.gameBoard[row][col].level
-		return moveLevel < 4 and moveLevel - currentWorkerLevel <= 1
+		return moveLevel < 4 and moveLevel >= 0 and moveLevel - currentWorkerLevel <= 1
 
 
-	# Needs testing
+# Tests written
 	def validatePosition(self, row, col):
 		return row >= 0 and col >= 0 and row <= 4 and col <= 4
 
 
-	# Needs testing
+# Tests written
 	def workersWillCollide(self, row, col):
 		return self.gameBoard[row][col].occupied
