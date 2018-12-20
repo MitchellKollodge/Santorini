@@ -116,12 +116,17 @@ class GameBoard:
 		print()
 
 
-	def printGameBoardWorkers(self):
+	def printGameBoardWorkers(self, oldRow, oldCol, newRow, newCol):
 		for rowIndex in range(len(self.gameBoard)):
 			rowStr = ''
 			for colIndex in range(len(self.gameBoard[rowIndex])):
 				if self.gameBoard[rowIndex][colIndex].occupied:
-					rowStr += 'True   '
+					if rowIndex == newRow and colIndex == newCol:
+						rowStr += '\033[92m' + 'True   ' + '\033[0m' # Green
+					else:
+						rowStr += 'True   '
+				elif rowIndex == oldRow and colIndex == oldCol:
+					rowStr += '\033[33m' + 'False  ' + '\033[0m'  # Yellow
 				else:
 					rowStr += 'False  '
 			print(rowStr)
