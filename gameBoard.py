@@ -75,6 +75,11 @@ class GameBoard:
 		return possiblePositions
 
 
+def minimax(self, position, depth, maximizingPlayer):
+	if depth == 0 or self.checkForWinner():
+		return self.evaluateGameBoard
+
+
 # Tests written
 	def moveWorker(self, player, workerNum, row, col):
 		if [row, col] in self.getNeighboringPositions(player.workers[workerNum].row, player.workers[workerNum].col):
@@ -116,13 +121,16 @@ class GameBoard:
 		print()
 
 
-	def printGameBoardWorkers(self, oldRow, oldCol, newRow, newCol):
+	def printGameBoardWorkers(self, oldRow, oldCol, newRow, newCol, players):
+		player1Workers = players[0].workers
 		for rowIndex in range(len(self.gameBoard)):
 			rowStr = ''
 			for colIndex in range(len(self.gameBoard[rowIndex])):
 				if self.gameBoard[rowIndex][colIndex].occupied:
-					if rowIndex == newRow and colIndex == newCol:
-						rowStr += '\033[92m' + 'True   ' + '\033[0m' # Green
+					if player1Workers[0].row == oldRow and player1Workers[0].col == oldCol or player1Workers[1].row == oldRow and player1Workers[1].col == oldCol:
+						rowStr += '\033[92m' + 'True 0 ' + '\033[0m'  # Green
+					elif rowIndex == newRow and colIndex == newCol:
+						rowStr += '\033[92m' + 'True 1 ' + '\033[0m' # Green
 					else:
 						rowStr += 'True   '
 				elif rowIndex == oldRow and colIndex == oldCol:
