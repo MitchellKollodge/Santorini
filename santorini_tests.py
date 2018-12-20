@@ -7,6 +7,25 @@ import player
 
 class GameBoardTests(unittest.TestCase):
 
+##################
+## buildLevel() ##
+##################
+	def test_buildLevel_EmptyTile(self):
+		myGameBoard = gameBoard.GameBoard()
+		myPlayer = player.Player()
+		myPlayer.workers[0].row = 0
+		myPlayer.workers[0].col = 0
+		myGameBoard.gameBoard[0][0].occupied = True
+		self.assertTrue(myGameBoard.buildLevel(myPlayer, 0, 1))
+
+	def test_buildLevel_UnderWorker(self):
+		myGameBoard = gameBoard.GameBoard()
+		myPlayer = player.Player()
+		myPlayer.workers[0].row = 0
+		myPlayer.workers[0].col = 0
+		myGameBoard.gameBoard[0][0].occupied = True
+		self.assertFalse(myGameBoard.buildLevel(myPlayer, 0, 0))
+
 #################################
 ##  getNeighboringPositions()  ##
 #################################
@@ -14,21 +33,21 @@ class GameBoardTests(unittest.TestCase):
 		myWorker = worker.Worker()
 		worker.row = 0
 		worker.col = 0
-		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker)
+		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker.row, worker.col)
 		self.assertEqual([[0, 1], [1, 0], [1, 1]], neighboringPositions)
 
 	def test_getNeighboringPositions_BottomRightCorner(self):
 		myWorker = worker.Worker()
 		worker.row = 4
 		worker.col = 4
-		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker)
+		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker.row, worker.col)
 		self.assertEqual([[3, 4], [3, 3], [4, 3]], neighboringPositions)
 
 	def test_getNeighboringPositions_Center(self):
 		myWorker = worker.Worker()
 		worker.row = 2
 		worker.col = 2
-		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker)
+		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker.row, worker.col)
 		self.assertEqual([[1, 2], [1, 3], [1, 1], [2, 3], [2, 1], [3, 2], [3, 3], [3, 1]], neighboringPositions)
 
 ####################
@@ -236,6 +255,23 @@ class GameBoardTests(unittest.TestCase):
 
 	def test_validatePosition_BottomEdgeInvalidPos(self):
 		self.assertFalse(gameBoard.GameBoard().validatePosition(5, 0))
+
+########################
+## verifyValidBuild() ##
+########################
+	def test_verifyValidBuild_emptyTile(self):
+		myGameBoard = gameBoard.GameBoard()
+		self.assertTrue(myGameBoard.verifyValidBuild(0, 0))
+
+	def test_verifyValidBuild_tileWithWorker(self):
+		myGameBoard = gameBoard.GameBoard()
+		myGameBoard.gameBoard[0][0].occupied = True
+		self.assertFalse(myGameBoard.verifyValidBuild(0, 0))
+
+	def test_verifyValidBuild_tileMaxLevel(self):
+		myGameBoard = gameBoard.GameBoard()
+		myGameBoard.gameBoard[0][0].level = 4
+		self.assertFalse(myGameBoard.verifyValidBuild(0, 0))
 
 ############################
 ##  workersWillCollide()  ##
