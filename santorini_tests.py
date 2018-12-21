@@ -187,53 +187,43 @@ class GameBoardTests(unittest.TestCase):
 ##  validateMoveLevel()  ##
 ###########################
 	def test_validateMoveLevel_SameLevelValid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 0
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 0
-		self.assertTrue(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		self.assertTrue(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 	def test_validateMoveLevel_UpOneLevelValid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 0
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 1
-		self.assertTrue(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		self.assertTrue(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 	def test_validateMoveLevel_UpOneLevelInvalid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 3
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 4
-		self.assertFalse(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		myGameBoard.gameBoard[1][0].level = 3
+		self.assertFalse(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 	def test_validateMoveLevel_UpTwoLevelsInvalid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 0
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 2
-		self.assertFalse(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		myGameBoard.gameBoard[1][0].level = 0
+		self.assertFalse(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 	def test_validateMoveLevel_DownOneLevelValid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 1
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 0
-		self.assertTrue(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		myGameBoard.gameBoard[1][0].level = 1
+		self.assertTrue(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
-	def test_validateMoveLevel_DownOneLevelInValid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 0
+	def test_validateMoveLevel_DownOneLevelInvalid(self):
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = -1
-		self.assertFalse(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		self.assertFalse(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 	def test_validateMoveLevel_DownTwoLevelsValid(self):
-		myWorker = worker.Worker()
-		myWorker.level = 2
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[0][0].level = 0
-		self.assertTrue(myGameBoard.validateMoveLevel(myWorker, 0, 0))
+		myGameBoard.gameBoard[1][0].level = 2
+		self.assertTrue(myGameBoard.validateMoveLevel(1, 0, 0, 0))
 
 ##########################
 ##  validatePosition()  ##
