@@ -1,9 +1,10 @@
 import worker
 
 class Player:
-	def __init__(self):
+	def __init__(self, playerNum):
 		self.worker1 = worker.Worker()
 		self.worker2 = worker.Worker()
 		self.workers = [self.worker1, self.worker2]
 		self.lastMovedWorker = -1
 		self.previousPositionWorker = worker.Worker()
+		self.playerNum = playerNum

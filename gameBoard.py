@@ -33,15 +33,14 @@ class GameBoard:
 		return gameBoard
 
 
-	def evaluateGameBoard(self, currentPlayer, allPlayers):
+	def evaluateGameBoard(self, playerNum):
 		heightValue = [10, 30, 90, 9000]
 		value = 0
-		for player in allPlayers:
-			for worker in player.workers:
-				if player == currentPlayer:
-					value += heightValue[self.gameBoard[worker.row][worker.col].level]
-				else:
-					value -= heightValue[self.gameBoard[worker.row][worker.col].level]
+		for row in range(len(self.gameBoard)):
+			for col in range(len(self.gameBoard[row])):
+				if self.gameBoard[row][col].occupied:
+					if playerNum == self.gameBoard[row][col].occupyingPlayer:
+						value += heightValue[self.gameBoard[row][col].level]
 		return value
 
 
@@ -114,6 +113,8 @@ class GameBoard:
 				player.lastMovedWorker = workerNum
 				self.gameBoard[player.previousPositionWorker.row][player.previousPositionWorker.col].occupied = False
 				self.gameBoard[row][col].occupied = True
+				self.gameBoard[player.previousPositionWorker.row][player.previousPositionWorker.col].occupyingPlayer = None
+				self.gameBoard[row][col].occupyingPlayer = player.playerNum
 				return True
 		return False
 
@@ -129,6 +130,7 @@ class GameBoard:
 			player.workers[workerNum].level = self.gameBoard[row][col].level
 			player.lastMovedWorker = workerNum
 			self.gameBoard[row][col].occupied = True
+			self.gameBoard[row][col].occupyingPlayer = player.playerNum
 			return True
 		return False
 
@@ -144,21 +146,26 @@ class GameBoard:
 
 	def printGameBoardWorkers(self, oldRow, oldCol, players):
 		player1Workers = players[0].workers
+		player2Workers = players[1].workers
 		for rowIndex in range(len(self.gameBoard)):
 			rowStr = ''
 			for colIndex in range(len(self.gameBoard[rowIndex])):
 				if self.gameBoard[rowIndex][colIndex].occupied:
-					if (player1Workers[0].row == rowIndex and player1Workers[0].col == colIndex) or (player1Workers[1].row == rowIndex and player1Workers[1].col == colIndex):
-						rowStr += '\033[92m' + 'True 0 ' + '\033[0m'  # Green
+					if (player1Workers[0].row == rowIndex and player1Workers[0].col == colIndex):
+						rowStr += '\033[92m' + 'True 00 ' + '\033[0m'  # Green
+					elif(player1Workers[1].row == rowIndex and player1Workers[1].col == colIndex):
+						rowStr += '\033[92m' + 'True 01 ' + '\033[0m'  # Green
+					elif(player2Workers[0].row == rowIndex and player2Workers[0].col == colIndex):
+						rowStr += '\033[92m' + 'True 10 ' + '\033[0m' # Green
 					else:
-						rowStr += '\033[92m' + 'True 1 ' + '\033[0m' # Green
+						rowStr += '\033[92m' + 'True 11 ' + '\033[0m'  # Green
 				elif rowIndex == oldRow and colIndex == oldCol:
 					if players[0].previousPositionWorker.row == oldRow and players[0].previousPositionWorker.col == oldCol:
-						rowStr += '\033[33m' + 'False0 ' + '\033[0m'  # Yellow
+						rowStr += '\033[33m' + 'False0  ' + '\033[0m'  # Yellow
 					else:
-						rowStr += '\033[33m' + 'False1 ' + '\033[0m'  # Yellow
+						rowStr += '\033[33m' + 'False1  ' + '\033[0m'  # Yellow
 				else:
-					rowStr += 'False  '
+					rowStr += 'False   '
 			print(rowStr)
 		print()
 

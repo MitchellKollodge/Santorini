@@ -1,12 +1,13 @@
 import player
 import gameBoard
 import random
+import minimax
 
 if __name__ == '__main__':
 	# Attempt at AI
 	# Setup Game
-	player1 = player.Player()
-	player2 = player.Player()
+	player1 = player.Player(0)
+	player2 = player.Player(1)
 	players = [player1, player2]
 	myGameBoard = gameBoard.GameBoard()
 	myGameBoard.printGameBoardWorkers(-1, -1, players)
@@ -27,47 +28,35 @@ if __name__ == '__main__':
 		newPos = [-1, -1]
 		playerNum = turnNum % 2
 		print('PLAYER NUM: ', playerNum)
+		bestMove, bestWorkerNum = minimax.createTree(players[playerNum], myGameBoard)
 		movedWorker = False
 		print('-- MOVING WORKER --')
 		workerNum = random.randint(0, 1)
+		validMovesWorker1 = myGameBoard.getValidMoves(players[playerNum].workers[0].row, players[playerNum].workers[0].col)
+		validMovesWorker2 = myGameBoard.getValidMoves(players[playerNum].workers[1].row, players[playerNum].workers[1].col)
 		validMoves = myGameBoard.getValidMoves(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col)
-		if len(validMoves) == 0 and workerNum == 0:
-			workerNum = 1
-			validMoves = myGameBoard.getValidMoves(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col)
-		elif len(validMoves) == 0 and workerNum == 1:
-			workerNum = 0
-			validMoves = myGameBoard.getValidMoves(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col)
 		if len(validMoves) == 0:
 			print('No moves left')
 			t = input('hi')
-		print('CUR POS', [players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col])
-		print('VALID MOVES: ', validMoves)
-		print('NUM OF COMBOS: ', len(myGameBoard.getAllMoveAndBuildCombos(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col)))
-		print('ALL COMBOS: ', myGameBoard.getAllMoveAndBuildCombos(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col))
-		if len(validMoves) == 0:
-			name = input('hi')
-		# Make a move
-		choiceMove = random.randint(0, len(validMoves) - 1)
 		oldPos = [players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col]
-		myGameBoard.moveWorker(players[playerNum], workerNum, validMoves[choiceMove][0], validMoves[choiceMove][1])
-		newPos = [validMoves[choiceMove][0], validMoves[choiceMove][1]]
-		print('MOVED TO: ', [validMoves[choiceMove][0], validMoves[choiceMove][1]])
+		print('CUR POS', oldPos)
+		print('VALID MOVES: ', validMovesWorker1 + validMovesWorker2)
+		# Make a move
+		myGameBoard.moveWorker(players[playerNum], workerNum, bestMove[0], bestMove[1])
+		newPos = [bestMove[0], bestMove[1]]
+		print('MOVED TO: ', newPos)
 		print('-- MOVE COMPLETE --')
 		if myGameBoard.checkForWinner():
 			print('!! WINNER !!')
 			print('PLAYER: ', playerNum)
 			print('TURN: ', turnNum)
 			break
-		buildComplete = False
 		print('-- BUILDING --')
-		validBuilds = myGameBoard.getValidBuilds(players[playerNum].workers[workerNum].row, players[playerNum].workers[workerNum].col)
-		print('VALID BUILDS: ', validBuilds)
 		# Make a build
-		choiceBuild = random.randint(0, len(validBuilds) - 1)
-		myGameBoard.buildLevel(players[playerNum], validBuilds[choiceBuild][0], validBuilds[choiceBuild][1])
-		print('BUILT AT: ', [validBuilds[choiceBuild][0], validBuilds[choiceBuild][1]])
+		myGameBoard.buildLevel(players[playerNum], bestMove[2], bestMove[3])
+		print('BUILT AT: ', [bestMove[2], bestMove[3]])
 		print('-- BUILD COMPLETE --')
-		print('EVAL: ', myGameBoard.evaluateGameBoard(players[playerNum], players))
+		print('EVAL: ', myGameBoard.evaluateGameBoard(playerNum))
 		myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], players)
 		myGameBoard.printGameBoardLevels()
 	myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], players)
