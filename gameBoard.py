@@ -75,9 +75,9 @@ class GameBoard:
 		return possiblePositions
 
 
-def minimax(self, position, depth, maximizingPlayer):
-	if depth == 0 or self.checkForWinner():
-		return self.evaluateGameBoard
+	def minimax(self, position, depth, maximizingPlayer):
+		if depth == 0 or self.checkForWinner():
+			return self.evaluateGameBoard
 
 
 # Tests written
@@ -127,12 +127,10 @@ def minimax(self, position, depth, maximizingPlayer):
 			rowStr = ''
 			for colIndex in range(len(self.gameBoard[rowIndex])):
 				if self.gameBoard[rowIndex][colIndex].occupied:
-					if player1Workers[0].row == oldRow and player1Workers[0].col == oldCol or player1Workers[1].row == oldRow and player1Workers[1].col == oldCol:
+					if (player1Workers[0].row == rowIndex and player1Workers[0].col == colIndex) or (player1Workers[1].row == rowIndex and player1Workers[1].col == colIndex):
 						rowStr += '\033[92m' + 'True 0 ' + '\033[0m'  # Green
-					elif rowIndex == newRow and colIndex == newCol:
-						rowStr += '\033[92m' + 'True 1 ' + '\033[0m' # Green
 					else:
-						rowStr += 'True   '
+						rowStr += '\033[92m' + 'True 1 ' + '\033[0m' # Green
 				elif rowIndex == oldRow and colIndex == oldCol:
 					rowStr += '\033[33m' + 'False  ' + '\033[0m'  # Yellow
 				else:
