@@ -121,7 +121,7 @@ class GameBoard:
 		print()
 
 
-	def printGameBoardWorkers(self, oldRow, oldCol, newRow, newCol, players):
+	def printGameBoardWorkers(self, oldRow, oldCol, players):
 		player1Workers = players[0].workers
 		for rowIndex in range(len(self.gameBoard)):
 			rowStr = ''
@@ -132,7 +132,10 @@ class GameBoard:
 					else:
 						rowStr += '\033[92m' + 'True 1 ' + '\033[0m' # Green
 				elif rowIndex == oldRow and colIndex == oldCol:
-					rowStr += '\033[33m' + 'False  ' + '\033[0m'  # Yellow
+					if players[0].previousPositionWorker.row == oldRow and players[0].previousPositionWorker.col == oldCol:
+						rowStr += '\033[33m' + 'False0 ' + '\033[0m'  # Yellow
+					else:
+						rowStr += '\033[33m' + 'False1 ' + '\033[0m'  # Yellow
 				else:
 					rowStr += 'False  '
 			print(rowStr)

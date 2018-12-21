@@ -9,7 +9,7 @@ if __name__ == '__main__':
 	player2 = player.Player()
 	players = [player1, player2]
 	myGameBoard = gameBoard.GameBoard()
-	myGameBoard.printGameBoardWorkers(-1, -1, -1, -1, players)
+	myGameBoard.printGameBoardWorkers(-1, -1, players)
 	
 	# Initial worker placement
 	for playerNum in range(2):
@@ -19,7 +19,7 @@ if __name__ == '__main__':
 				row = random.randint(0, 4)
 				col = random.randint(0, 4)
 				placedWorker = myGameBoard.placeInitialWorker(players[playerNum], workerNum, row, col)
-		myGameBoard.printGameBoardWorkers(-1, -1, -1, -1, players)
+		myGameBoard.printGameBoardWorkers(-1, -1, players)
 	
 	for turnNum in range(100):
 		oldPos = [-1, -1]
@@ -63,8 +63,8 @@ if __name__ == '__main__':
 			buildComplete = myGameBoard.buildLevel(players[playerNum], row, col)
 		print('BUILD COMPLETE')
 		print('EVAL: ', myGameBoard.evaluateGameBoard(players[playerNum], players))
-		myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], newPos[0], newPos[1], players)
+		myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], players)
 		myGameBoard.printGameBoardLevels()
-	myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], newPos[0], newPos[1], players)
+	myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], players)
 	myGameBoard.printGameBoardLevels()
 	print('DONE')
