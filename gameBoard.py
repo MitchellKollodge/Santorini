@@ -34,24 +34,25 @@ class GameBoard:
 
 
 	def evaluateGameBoard(self, playerNum):
-		heightValue = [10, 30, 90, 9000]
+		heightValue = [0, 30, 90, 9000]
 		value = 0
 		for row in range(len(self.gameBoard)):
 			for col in range(len(self.gameBoard[row])):
-				if self.gameBoard[row][col].occupied:
-					if playerNum == self.gameBoard[row][col].occupyingPlayer:
-						value += heightValue[self.gameBoard[row][col].level]
+				if self.gameBoard[row][col].occupyingPlayer == playerNum:
+					value += heightValue[self.gameBoard[row][col].level]
+				elif self.gameBoard[row][col].occupied:
+					value -= heightValue[self.gameBoard[row][col].level]
 		return value
 
 
-	def getAllMoveAndBuildCombos(self, row, col):
+	def getAllMoveAndBuildCombos(self, workerNum, row, col):
 		combos = []
 		allValidMoves = self.getValidMoves(row, col)
 		for move in allValidMoves:
 			validBuilds = self.getValidBuilds(move[0], move[1])
 			validBuilds.append([row, col])
 			for build in validBuilds:
-				combos.append(move + build)
+				combos.append([workerNum, move + build])
 		return combos
 
 
@@ -95,21 +96,14 @@ class GameBoard:
 		return validMoves
 
 
-	def minimax(self, position, depth, maximizingPlayer):
-		if depth == 0 or self.checkForWinner():
-			return self.evaluateGameBoard
-
-
 # Tests written
 	def moveWorker(self, player, workerNum, row, col):
 		if [row, col] in self.getNeighboringPositions(player.workers[workerNum].row, player.workers[workerNum].col):
 			if self.workersWillCollide(row, col) == False and self.validateMoveLevel(player.workers[workerNum].row, player.workers[workerNum].col, row, col):
 				player.previousPositionWorker.row = player.workers[workerNum].row
 				player.previousPositionWorker.col = player.workers[workerNum].col
-				player.previousPositionWorker.level = player.workers[workerNum].level
 				player.workers[workerNum].row = row
 				player.workers[workerNum].col = col
-				player.workers[workerNum].level = self.gameBoard[row][col].level
 				player.lastMovedWorker = workerNum
 				self.gameBoard[player.previousPositionWorker.row][player.previousPositionWorker.col].occupied = False
 				self.gameBoard[row][col].occupied = True
@@ -124,10 +118,8 @@ class GameBoard:
 		if self.workersWillCollide(row, col) == False and self.validatePosition(row, col):
 			player.previousPositionWorker.row = row
 			player.previousPositionWorker.col = col
-			player.previousPositionWorker.level = self.gameBoard[row][col].level
 			player.workers[workerNum].row = row
 			player.workers[workerNum].col = col
-			player.workers[workerNum].level = self.gameBoard[row][col].level
 			player.lastMovedWorker = workerNum
 			self.gameBoard[row][col].occupied = True
 			self.gameBoard[row][col].occupyingPlayer = player.playerNum
