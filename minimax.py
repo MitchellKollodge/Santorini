@@ -17,13 +17,13 @@ def buildTree(curPlayerNum, players, currentGameBoard):
         action = actionSet[1]
         performAction(customGameBoard, customMaxPlayer, workerNum, action)
         if customGameBoard.checkForWinner():
-            tempNode.value = -999999
+            tempNode.value = 9000
             tempNode.leafNode = True
             undoAction(customGameBoard, customMaxPlayer, workerNum, action, action[0], action[1])
             continue
         depth2 = getCombos(customGameBoard, customMinPlayer)
         if len(depth2) == 0:
-            tempNode.value = -999999
+            tempNode.value = 9000
             tempNode.leafNode = True
             undoAction(customGameBoard, customMaxPlayer, workerNum, action, action[0], action[1])
             continue
@@ -33,13 +33,13 @@ def buildTree(curPlayerNum, players, currentGameBoard):
             action2 = actionSet2[1]
             performAction(customGameBoard, customMinPlayer, workerNum2, action2)
             if customGameBoard.checkForWinner():
-                tempNode2.value = 999999
+                tempNode2.value = -9000
                 tempNode2.leafNode = True
                 undoAction(customGameBoard, customMinPlayer, workerNum2, action2, action2[0], action2[1])
                 continue
             depth3 = getCombos(customGameBoard, customMaxPlayer)
             if len(depth3) == 0:
-                tempNode2.value = 999999
+                tempNode2.value = -9000
                 tempNode2.leafNode = True
                 undoAction(customGameBoard, customMinPlayer, workerNum2, action2, action2[0], action2[1])
                 continue
@@ -49,13 +49,13 @@ def buildTree(curPlayerNum, players, currentGameBoard):
                 action3 = actionSet3[1]
                 performAction(customGameBoard, customMaxPlayer, workerNum3, action3)
                 if customGameBoard.checkForWinner():
-                    tempNode3.value = -999999
+                    tempNode3.value = 9000
                     tempNode3.leafNode = True
                     undoAction(customGameBoard, customMaxPlayer, workerNum3, action3, action3[0], action3[1])
                     continue
                 depth4 = getCombos(customGameBoard, customMinPlayer)
                 if len(depth4) == 0:
-                    tempNode3.value = -999999
+                    tempNode3.value = 9000
                     tempNode3.leafNode = True
                     undoAction(customGameBoard, customMaxPlayer, workerNum3, action3, action3[0], action3[1])
                     continue
@@ -65,13 +65,13 @@ def buildTree(curPlayerNum, players, currentGameBoard):
                     action4 = actionSet4[1]
                     performAction(customGameBoard, customMinPlayer, workerNum4, action4)
                     if customGameBoard.checkForWinner():
-                        tempNode4.value = 999999
+                        tempNode4.value = -9000
                         tempNode4.leafNode = True
                         undoAction(customGameBoard, customMinPlayer, workerNum4, action4, action4[0], action4[1])
                         continue
                     depth5 = getCombos(customGameBoard, customMaxPlayer)
                     if len(depth5) == 0:
-                        tempNode4.value = 999999
+                        tempNode4.value = -9000
                         tempNode4.leafNode = True
                         undoAction(customGameBoard, customMinPlayer, workerNum4, action4, action4[0], action4[1])
                         continue

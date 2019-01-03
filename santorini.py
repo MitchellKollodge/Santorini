@@ -35,6 +35,7 @@ if __name__ == '__main__':
 		bestVal, bestActionSet = minimax.minimax(rootNode, 2, True, 0, 0)
 		bestMove = bestActionSet[1]
 		bestWorkerNum = bestActionSet[0]
+		print('BEST VAL: ', bestVal)
 		# bestMove, bestWorkerNum = minimax.oneDeepBestAction(players[playerNum], myGameBoard)
 		print('-- MOVING WORKER --')
 		oldPos = [players[playerNum].workers[bestWorkerNum].row, players[playerNum].workers[bestWorkerNum].col]

@@ -12,7 +12,7 @@ class GameBoardTests(unittest.TestCase):
 ##################
 	def test_buildLevel_EmptyTile(self):
 		myGameBoard = gameBoard.GameBoard()
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
 		myGameBoard.gameBoard[0][0].occupied = True
@@ -20,7 +20,7 @@ class GameBoardTests(unittest.TestCase):
 
 	def test_buildLevel_UnderWorker(self):
 		myGameBoard = gameBoard.GameBoard()
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
 		myGameBoard.gameBoard[0][0].occupied = True
@@ -50,11 +50,35 @@ class GameBoardTests(unittest.TestCase):
 		neighboringPositions = gameBoard.GameBoard().getNeighboringPositions(worker.row, worker.col)
 		self.assertEqual([[1, 2], [1, 3], [1, 1], [2, 3], [2, 1], [3, 2], [3, 3], [3, 1]], neighboringPositions)
 
-####################
+#####################
+## getValidMoves() ##
+#####################
+	def test_getValidMoves_TopLeftCornerEmptyBoard(self):
+		row = 0
+		col = 0
+		validMoves = gameBoard.GameBoard().getValidMoves(row, col)
+		self.assertEqual([[0, 1], [1, 0], [1, 1]], validMoves)
+
+	def test_getValidMoves_TopLeftCornerWithBuilds(self):
+		row = 0
+		col = 0
+		myGameBoard = gameBoard.GameBoard()
+		myGameBoard.gameBoard[0][1].level = 2
+		validMoves = myGameBoard.getValidMoves(row, col)
+		self.assertEqual([[1, 0], [1, 1]], validMoves)
+
+	def test_getValidMoves_TopLeftCornerWithOpponent(self):
+		row = 0
+		col = 0
+		myGameBoard = gameBoard.GameBoard()
+		myGameBoard.gameBoard[0][1].occupied = True
+		validMoves = myGameBoard.getValidMoves(row, col)
+		self.assertEqual([[1, 0], [1, 1]], validMoves)
+
 ##  moveWorker()  ##
 ####################
 	def test_moveWorker_OnePosRightSameLevelValid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
@@ -66,14 +90,12 @@ class GameBoardTests(unittest.TestCase):
 						myGameBoard.gameBoard[0][1].occupied == True and
 						myPlayer.workers[0].row == 0 and
 						myPlayer.workers[0].col == 1 and
-						myPlayer.workers[0].level == 0 and
 						myPlayer.previousPositionWorker.row == 0 and
 						myPlayer.previousPositionWorker.col == 0 and
-						myPlayer.previousPositionWorker.level == 0 and
 						myPlayer.lastMovedWorker == 0)
 
 	def test_moveWorker_OnePosRightSameLevelInvalid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 4
@@ -87,7 +109,7 @@ class GameBoardTests(unittest.TestCase):
 						myPlayer.workers[0].level == 0)
 
 	def test_moveWorker_OnePosRightUpOneLevelValid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
@@ -100,14 +122,12 @@ class GameBoardTests(unittest.TestCase):
 						myGameBoard.gameBoard[0][1].occupied == True and
 						myPlayer.workers[0].row == 0 and
 						myPlayer.workers[0].col == 1 and
-						myPlayer.workers[0].level == 1 and
 						myPlayer.previousPositionWorker.row == 0 and
 						myPlayer.previousPositionWorker.col == 0 and
-						myPlayer.previousPositionWorker.level == 0 and
 						myPlayer.lastMovedWorker == 0)
 
 	def test_moveWorker_OnePosRightUpTwoLevelsInvalid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
@@ -122,7 +142,7 @@ class GameBoardTests(unittest.TestCase):
 						myPlayer.workers[0].level == 0)
 
 	def test_moveWorker_OnePosRightDownOneLevelValid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
@@ -135,14 +155,12 @@ class GameBoardTests(unittest.TestCase):
 						myGameBoard.gameBoard[0][1].occupied == True and
 						myPlayer.workers[0].row == 0 and
 						myPlayer.workers[0].col == 1 and
-						myPlayer.workers[0].level == 0 and
 						myPlayer.previousPositionWorker.row == 0 and
 						myPlayer.previousPositionWorker.col == 0 and
-						myPlayer.previousPositionWorker.level == 1 and
 						myPlayer.lastMovedWorker == 0)
 
 	def test_moveWorker_OnePosRightDownTwoLevelsValid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myPlayer.workers[0].row = 0
 		myPlayer.workers[0].col = 0
@@ -155,30 +173,28 @@ class GameBoardTests(unittest.TestCase):
 						myGameBoard.gameBoard[0][1].occupied == True and
 						myPlayer.workers[0].row == 0 and
 						myPlayer.workers[0].col == 1 and
-						myPlayer.workers[0].level == 0 and
 						myPlayer.previousPositionWorker.row == 0 and
 						myPlayer.previousPositionWorker.col == 0 and
-						myPlayer.previousPositionWorker.level == 2 and
 						myPlayer.lastMovedWorker == 0)
 
 ############################
 ##  placeInitialWorker()  ##
 ############################
 	def test_placeInitialWorker_CenterValid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		successful = myGameBoard.placeInitialWorker(myPlayer, 0, 2, 2)
 		self.assertTrue(successful and myGameBoard.gameBoard[2][2].occupied)
 
 	def test_placeInitialWorker_CenterInvalid(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		myGameBoard.gameBoard[2][2].occupied = True
 		successful = myGameBoard.placeInitialWorker(myPlayer, 0, 2, 2)
 		self.assertFalse(successful and myGameBoard.gameBoard[2][2].occupied)
 
 	def test_placeInitialWorker_InvalidPos(self):
-		myPlayer = player.Player()
+		myPlayer = player.Player(0)
 		myGameBoard = gameBoard.GameBoard()
 		successful = myGameBoard.placeInitialWorker(myPlayer, 0, -1, 0)
 		self.assertFalse(successful)

@@ -34,7 +34,7 @@ class GameBoard:
 
 
 	def evaluateGameBoard(self, playerNum):
-		heightValue = [0, 30, 90, 9000]
+		heightValue = [0, 300, 900, 9000]
 		value = 0
 		for row in range(len(self.gameBoard)):
 			for col in range(len(self.gameBoard[row])):
@@ -86,7 +86,7 @@ class GameBoard:
 				validBuilds.append(pos)
 		return validBuilds
 
-
+# Tests written
 	def getValidMoves(self, row, col):
 		validMoves = []
 		neighboringPositions = self.getNeighboringPositions(row, col)
@@ -166,12 +166,12 @@ class GameBoard:
 	def validateMoveLevel(self, oldRow, oldCol, newRow, newCol):
 		currentWorkerLevel = self.gameBoard[oldRow][oldCol].level
 		moveLevel = self.gameBoard[newRow][newCol].level
-		return moveLevel < 4 and moveLevel >= 0 and moveLevel - currentWorkerLevel <= 1
+		return 0 <= moveLevel < 4 and moveLevel - currentWorkerLevel <= 1
 
 
 # Tests written
 	def validatePosition(self, row, col):
-		return row >= 0 and col >= 0 and row <= 4 and col <= 4
+		return 0 <= row <= 4 and 0 <= col <= 4
 
 
 # Tests written
