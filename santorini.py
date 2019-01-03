@@ -2,6 +2,7 @@ import player
 import gameBoard
 import random
 import minimax
+from numpy import inf
 
 if __name__ == '__main__':
 	# Setup Game
@@ -32,7 +33,7 @@ if __name__ == '__main__':
 		if len(rootNode.childNodes) == 0:
 			print('No Moves Left - Player ' + str(playerNum) + ' Loses')
 			break
-		bestVal, bestActionSet = minimax.minimax(rootNode, 2, True, 0, 0)
+		bestVal, bestActionSet = minimax.minimax(rootNode, 2, True, -inf, +inf)
 		bestMove = bestActionSet[1]
 		bestWorkerNum = bestActionSet[0]
 		print('BEST VAL: ', bestVal)
