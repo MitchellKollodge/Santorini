@@ -2,6 +2,7 @@ import player
 import gameBoard
 import random
 import minimax
+import time
 from numpy import inf
 
 if __name__ == '__main__':
@@ -11,6 +12,7 @@ if __name__ == '__main__':
 	players = [player1, player2]
 	myGameBoard = gameBoard.GameBoard()
 	myGameBoard.printGameBoardWorkers(-1, -1, players)
+	myMiniMax = minimax.MiniMax()
 	
 	# Initial worker placement
 	# for playerNum in range(2):
@@ -29,11 +31,15 @@ if __name__ == '__main__':
 		print('TURN: ', turnNum)
 		playerNum = turnNum % 2
 		print('PLAYER NUM: ', playerNum)
-		rootNode = minimax.buildTree(playerNum, players, myGameBoard)
+		start = time.time()
+		rootNode = myMiniMax.buildTree(playerNum, players, myGameBoard)
+		print('Root node build time: ', time.time() - start)
 		if len(rootNode.childNodes) == 0:
 			print('No Moves Left - Player ' + str(playerNum) + ' Loses')
 			break
-		bestVal, bestActionSet = minimax.minimax(rootNode, 2, True, -inf, +inf)
+		start = time.time()
+		bestVal, bestActionSet = myMiniMax.minimax(rootNode, 2, True, -inf, +inf)
+		print('Minimax process time: ', time.time() - start)
 		bestMove = bestActionSet[1]
 		bestWorkerNum = bestActionSet[0]
 		print('BEST VAL: ', bestVal)

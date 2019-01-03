@@ -1,9 +1,11 @@
 import tile
+import turn
 
 
 class GameBoard:
 	def __init__(self):
 		self.gameBoard = self.createBaseGameBoard()
+		self.turnTracker = turn.TurnTracker()
 
 
 # Tests written
@@ -123,6 +125,7 @@ class GameBoard:
 			player.lastMovedWorker = workerNum
 			self.gameBoard[row][col].occupied = True
 			self.gameBoard[row][col].occupyingPlayer = player.playerNum
+			self.turnTracker.addToHistory(player, workerNum, -1, -1, row, col, None, None)
 			return True
 		return False
 
