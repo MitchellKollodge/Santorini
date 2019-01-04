@@ -25,13 +25,13 @@ class MiniMax:
             if customGameBoard.checkForWinner():
                 tempNode.value = 9000
                 tempNode.leafNode = True
-                self.undoAction(customGameBoard, customMaxPlayer, workerNum, action, action[0], action[1])
+                self.undoAction(customGameBoard, customMaxPlayer, workerNum)
                 continue
             depth2 = self.getCombos(customGameBoard, customMinPlayer)
             if len(depth2) == 0:
                 tempNode.value = 9000
                 tempNode.leafNode = True
-                self.undoAction(customGameBoard, customMaxPlayer, workerNum, action, action[0], action[1])
+                self.undoAction(customGameBoard, customMaxPlayer, workerNum)
                 continue
             for actionSet2 in depth2:
                 tempNode2 = self.setupNode(actionSet2, tempNode)
@@ -41,13 +41,13 @@ class MiniMax:
                 if customGameBoard.checkForWinner():
                     tempNode2.value = -9000
                     tempNode2.leafNode = True
-                    self.undoAction(customGameBoard, customMinPlayer, workerNum2, action2, action2[0], action2[1])
+                    self.undoAction(customGameBoard, customMinPlayer, workerNum2)
                     continue
                 depth3 = self.getCombos(customGameBoard, customMaxPlayer)
                 if len(depth3) == 0:
                     tempNode2.value = -9000
                     tempNode2.leafNode = True
-                    self.undoAction(customGameBoard, customMinPlayer, workerNum2, action2, action2[0], action2[1])
+                    self.undoAction(customGameBoard, customMinPlayer, workerNum2)
                     continue
                 for actionSet3 in depth3:
                     tempNode3 = self.setupNode(actionSet3, tempNode2)
@@ -57,13 +57,13 @@ class MiniMax:
                     if customGameBoard.checkForWinner():
                         tempNode3.value = 9000
                         tempNode3.leafNode = True
-                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3, action3, action3[0], action3[1])
+                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3)
                         continue
                     depth4 = self.getCombos(customGameBoard, customMinPlayer)
                     if len(depth4) == 0:
                         tempNode3.value = 9000
                         tempNode3.leafNode = True
-                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3, action3, action3[0], action3[1])
+                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3)
                         continue
                     for actionSet4 in depth4:
                         tempNode4 = self.setupNode(actionSet4, tempNode3)
@@ -73,20 +73,20 @@ class MiniMax:
                         if customGameBoard.checkForWinner():
                             tempNode4.value = -9000
                             tempNode4.leafNode = True
-                            self.undoAction(customGameBoard, customMinPlayer, workerNum4, action4, action4[0], action4[1])
+                            self.undoAction(customGameBoard, customMinPlayer, workerNum4)
                             continue
                         depth5 = self.getCombos(customGameBoard, customMaxPlayer)
                         if len(depth5) == 0:
                             tempNode4.value = -9000
                             tempNode4.leafNode = True
-                            self.undoAction(customGameBoard, customMinPlayer, workerNum4, action4, action4[0], action4[1])
+                            self.undoAction(customGameBoard, customMinPlayer, workerNum4)
                             continue
                         tempNode4.value = customGameBoard.evaluateGameBoard(customMinPlayer.playerNum)
                         tempNode4.leafNode = True
-                        self.undoAction(customGameBoard, customMinPlayer, workerNum4, action4, action4[0], action4[1])
-                    self.undoAction(customGameBoard, customMaxPlayer, workerNum3, action3, action3[0], action3[1])
-                self.undoAction(customGameBoard, customMinPlayer, workerNum2, action2, action2[0], action2[1])
-            self.undoAction(customGameBoard, customMaxPlayer, workerNum, action, action[0], action[1])
+                        self.undoAction(customGameBoard, customMinPlayer, workerNum4)
+                    self.undoAction(customGameBoard, customMaxPlayer, workerNum3)
+                self.undoAction(customGameBoard, customMinPlayer, workerNum2)
+            self.undoAction(customGameBoard, customMaxPlayer, workerNum)
         return rootNode
 
 
@@ -156,7 +156,7 @@ class MiniMax:
                 maxScore = evalScore
                 bestMove = action[1]
                 bestWorker = 0
-            self.undoAction(customGameBoard, customPlayer, 1, action[1], player.workers[0].row, player.workers[0].col)
+            self.undoAction(customGameBoard, customPlayer, 1)
         for action in depth1Worker1:
             self.performAction(customGameBoard, customPlayer, 1, action[1])
             evalScore = customGameBoard.evaluateGameBoard(player.playerNum)
@@ -164,7 +164,7 @@ class MiniMax:
                 maxScore = evalScore
                 bestMove = action[1]
                 bestWorker = 1
-            self.undoAction(customGameBoard, customPlayer, 1, action[1], player.workers[1].row, player.workers[1].col)
+            self.undoAction(customGameBoard, customPlayer, 1)
         print('BEST MOVE: ', bestMove)
         print('MAX SCORE: ', maxScore)
         return bestMove, bestWorker
@@ -178,7 +178,7 @@ class MiniMax:
         return customGameBoard
 
 
-    def undoAction(self, customGameBoard, customPlayer, workerNum, action, workerRow, workerCol):
+    def undoAction(self, customGameBoard, customPlayer, workerNum):
         previousPos = self.turnTracker.popFromHistory()
         customGameBoard.gameBoard[previousPos['moveFromRow']][previousPos['moveFromCol']].occupied = True
         customGameBoard.gameBoard[previousPos['moveFromRow']][previousPos['moveFromCol']].occupyingPlayer = customPlayer.playerNum
