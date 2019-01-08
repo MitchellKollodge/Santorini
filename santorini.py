@@ -28,17 +28,24 @@ if __name__ == '__main__':
 	myGameBoard.placeInitialWorker(players[1], 0, 1, 0)
 	myGameBoard.placeInitialWorker(players[1], 1, 1, 1)
 
+	myGameBoard.gameBoard[0][3].level = 4
+	myGameBoard.gameBoard[1][3].level = 4
+	myGameBoard.gameBoard[2][3].level = 4
+	myGameBoard.gameBoard[3][0].level = 4
+	myGameBoard.gameBoard[3][1].level = 4
+	myGameBoard.gameBoard[3][2].level = 4
+	myGameBoard.gameBoard[3][3].level = 4
 	# start = time.time()
 	# for i in range(1000000):
 	# 	results = myGameBoard.getAllMoveAndBuildCombosTest(1, 1, 0)
 	# print('TEST TIME: ', time.time() - start)
-    #
+	#
 	# start = time.time()
 	# for i in range(1000000):
 	# 	results = myGameBoard.getAllMoveAndBuildCombos(1, 1, 0)
 	# print('REAL TIME: ', time.time() - start)
 
-
+	startTime = time.time()
 	for turnNum in range(100):
 		print('TURN: ', turnNum)
 		playerNum = turnNum % 2
@@ -79,3 +86,4 @@ if __name__ == '__main__':
 	myGameBoard.printGameBoardWorkers(oldPos[0], oldPos[1], players)
 	myGameBoard.printGameBoardLevels()
 	print('DONE')
+	print('TOTAL TIME: ', time.time() - startTime)

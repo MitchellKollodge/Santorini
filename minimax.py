@@ -12,86 +12,6 @@ class MiniMax:
         self.turnTracker = turn.TurnTracker()
 
 
-    def branchBuilder(self, everything):
-        rootNode = everything[0]
-        actionSet = everything[1]
-        customGameBoard = everything[2]
-        customMaxPlayer = everything[3]
-        customMinPlayer = everything[4]
-        turnTracker = everything[5]
-
-        tempNode = self.setupNode(actionSet, rootNode)
-        workerNum = actionSet[0]
-        action = actionSet[1]
-        self.performAction(customGameBoard, customMaxPlayer, workerNum, action, turnTracker)
-        if customGameBoard.checkForWinner():
-            tempNode.value = 9000
-            tempNode.leafNode = True
-            self.undoAction(customGameBoard, customMaxPlayer, workerNum, turnTracker)
-            return
-        depth2 = self.getCombos(customGameBoard, customMinPlayer)
-        if len(depth2) == 0:
-            tempNode.value = 9000
-            tempNode.leafNode = True
-            self.undoAction(customGameBoard, customMaxPlayer, workerNum, turnTracker)
-            return
-        for actionSet2 in depth2:
-            tempNode2 = self.setupNode(actionSet2, tempNode)
-            workerNum2 = actionSet2[0]
-            action2 = actionSet2[1]
-            self.performAction(customGameBoard, customMinPlayer, workerNum2, action2, turnTracker)
-            if customGameBoard.checkForWinner():
-                tempNode2.value = -9000
-                tempNode2.leafNode = True
-                self.undoAction(customGameBoard, customMinPlayer, workerNum2, turnTracker)
-                continue
-            depth3 = self.getCombos(customGameBoard, customMaxPlayer)
-            if len(depth3) == 0:
-                tempNode2.value = -9000
-                tempNode2.leafNode = True
-                self.undoAction(customGameBoard, customMinPlayer, workerNum2, turnTracker)
-                continue
-            for actionSet3 in depth3:
-                tempNode3 = self.setupNode(actionSet3, tempNode2)
-                workerNum3 = actionSet3[0]
-                action3 = actionSet3[1]
-                self.performAction(customGameBoard, customMaxPlayer, workerNum3, action3, turnTracker)
-                if customGameBoard.checkForWinner():
-                    tempNode3.value = 9000
-                    tempNode3.leafNode = True
-                    self.undoAction(customGameBoard, customMaxPlayer, workerNum3, turnTracker)
-                    continue
-                depth4 = self.getCombos(customGameBoard, customMinPlayer)
-                if len(depth4) == 0:
-                    tempNode3.value = 9000
-                    tempNode3.leafNode = True
-                    self.undoAction(customGameBoard, customMaxPlayer, workerNum3, turnTracker)
-                    continue
-                for actionSet4 in depth4:
-                    tempNode4 = self.setupNode(actionSet4, tempNode3)
-                    workerNum4 = actionSet4[0]
-                    action4 = actionSet4[1]
-                    self.performAction(customGameBoard, customMinPlayer, workerNum4, action4, turnTracker)
-                    if customGameBoard.checkForWinner():
-                        tempNode4.value = -9000
-                        tempNode4.leafNode = True
-                        self.undoAction(customGameBoard, customMinPlayer, workerNum4, turnTracker)
-                        continue
-                    depth5 = self.getCombos(customGameBoard, customMaxPlayer)
-                    if len(depth5) == 0:
-                        tempNode4.value = -9000
-                        tempNode4.leafNode = True
-                        self.undoAction(customGameBoard, customMinPlayer, workerNum4, turnTracker)
-                        continue
-                    tempNode4.value = customGameBoard.evaluateGameBoard(customMinPlayer.playerNum)
-                    tempNode4.leafNode = True
-                    self.undoAction(customGameBoard, customMinPlayer, workerNum4, turnTracker)
-                self.undoAction(customGameBoard, customMaxPlayer, workerNum3, turnTracker)
-            self.undoAction(customGameBoard, customMinPlayer, workerNum2, turnTracker)
-        self.undoAction(customGameBoard, customMaxPlayer, workerNum, turnTracker)
-        return tempNode
-
-
     def buildTree(self, curPlayerNum, players, currentGameBoard):
         customGameBoard = self.copyGameBoard(currentGameBoard)
         nextPlayerNum = 1 if curPlayerNum == 0 else 0
@@ -101,19 +21,76 @@ class MiniMax:
 
         depth1 = self.getCombos(customGameBoard, customMaxPlayer)
 
-        processArgs = []
         for actionSet in depth1:
-            processArgs.append([rootNode, actionSet, self.copyGameBoard(currentGameBoard), copy.deepcopy(players[curPlayerNum]), copy.deepcopy(players[nextPlayerNum]), turn.TurnTracker()])
-
-        p = Pool(len(processArgs))
-        data = p.map(self.branchBuilder, processArgs)
-        p.close()
-
-        for tempNode in data:
-            if tempNode is not None:
-                rootNode.childNodes.append(tempNode)
-                tempNode.parentNode = rootNode
-
+            tempNode = self.setupNode(actionSet, rootNode)
+            workerNum = actionSet[0]
+            action = actionSet[1]
+            self.performAction(customGameBoard, customMaxPlayer, workerNum, action, self.turnTracker)
+            if customGameBoard.checkForWinner():
+                tempNode.value = 9000
+                tempNode.leafNode = True
+                self.undoAction(customGameBoard, customMaxPlayer, workerNum, self.turnTracker)
+                continue
+            depth2 = self.getCombos(customGameBoard, customMinPlayer)
+            if len(depth2) == 0:
+                tempNode.value = 9000
+                tempNode.leafNode = True
+                self.undoAction(customGameBoard, customMaxPlayer, workerNum, self.turnTracker)
+                continue
+            for actionSet2 in depth2:
+                tempNode2 = self.setupNode(actionSet2, tempNode)
+                workerNum2 = actionSet2[0]
+                action2 = actionSet2[1]
+                self.performAction(customGameBoard, customMinPlayer, workerNum2, action2, self.turnTracker)
+                if customGameBoard.checkForWinner():
+                    tempNode2.value = -9000
+                    tempNode2.leafNode = True
+                    self.undoAction(customGameBoard, customMinPlayer, workerNum2, self.turnTracker)
+                    continue
+                depth3 = self.getCombos(customGameBoard, customMaxPlayer)
+                if len(depth3) == 0:
+                    tempNode2.value = -9000
+                    tempNode2.leafNode = True
+                    self.undoAction(customGameBoard, customMinPlayer, workerNum2, self.turnTracker)
+                    continue
+                for actionSet3 in depth3:
+                    tempNode3 = self.setupNode(actionSet3, tempNode2)
+                    workerNum3 = actionSet3[0]
+                    action3 = actionSet3[1]
+                    self.performAction(customGameBoard, customMaxPlayer, workerNum3, action3, self.turnTracker)
+                    if customGameBoard.checkForWinner():
+                        tempNode3.value = 9000
+                        tempNode3.leafNode = True
+                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3, self.turnTracker)
+                        continue
+                    depth4 = self.getCombos(customGameBoard, customMinPlayer)
+                    if len(depth4) == 0:
+                        tempNode3.value = 9000
+                        tempNode3.leafNode = True
+                        self.undoAction(customGameBoard, customMaxPlayer, workerNum3, self.turnTracker)
+                        continue
+                    for actionSet4 in depth4:
+                        tempNode4 = self.setupNode(actionSet4, tempNode3)
+                        workerNum4 = actionSet4[0]
+                        action4 = actionSet4[1]
+                        self.performAction(customGameBoard, customMinPlayer, workerNum4, action4, self.turnTracker)
+                        if customGameBoard.checkForWinner():
+                            tempNode4.value = -9000
+                            tempNode4.leafNode = True
+                            self.undoAction(customGameBoard, customMinPlayer, workerNum4, self.turnTracker)
+                            continue
+                        depth5 = self.getCombos(customGameBoard, customMaxPlayer)
+                        if len(depth5) == 0:
+                            tempNode4.value = -9000
+                            tempNode4.leafNode = True
+                            self.undoAction(customGameBoard, customMinPlayer, workerNum4, self.turnTracker)
+                            continue
+                        tempNode4.value = customGameBoard.evaluateGameBoard(customMinPlayer.playerNum)
+                        tempNode4.leafNode = True
+                        self.undoAction(customGameBoard, customMinPlayer, workerNum4, self.turnTracker)
+                    self.undoAction(customGameBoard, customMaxPlayer, workerNum3, self.turnTracker)
+                self.undoAction(customGameBoard, customMinPlayer, workerNum2, self.turnTracker)
+            self.undoAction(customGameBoard, customMaxPlayer, workerNum, self.turnTracker)
         return rootNode
 
 

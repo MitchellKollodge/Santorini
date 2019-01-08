@@ -42,21 +42,12 @@ class GameBoard:
                     value -= heightValue[self.gameBoard[row][col].level]
         return value
 
+
     def getAllMoveAndBuildCombos(self, workerNum, row, col):
         combos = []
-        allValidMoves = self.getValidMoves(row, col)
-        for move in allValidMoves:
-            validBuilds = self.getValidBuilds(move[0], move[1])
-            validBuilds.append([row, col])
-            for build in validBuilds:
-                combos.append([workerNum, move + build])
-        return combos
-
-    def getAllMoveAndBuildCombosTest(self, workerNum, row, col):
-        combos = []
         appendCombos = combos.append
-        getValidBuildsTest = self.getValidBuildsTest
-        allValidMoves = self.getValidMovesTest(row, col)
+        getValidBuildsTest = self.getValidBuilds
+        allValidMoves = self.getValidMoves(row, col)
         for move in allValidMoves:
             validBuilds = getValidBuildsTest(move[0], move[1])
             validBuilds.append([row, col])
@@ -64,29 +55,8 @@ class GameBoard:
                 appendCombos([workerNum, move + build])
         return combos
 
-    # Tests written
+# Tests written
     def getNeighboringPositions(self, row, col):
-        possiblePositions = []
-        if self.validatePosition(row - 1, col):
-            possiblePositions.append([row - 1, col])
-        if self.validatePosition(row - 1, col + 1):
-            possiblePositions.append([row - 1, col + 1])
-        if self.validatePosition(row - 1, col - 1):
-            possiblePositions.append([row - 1, col - 1])
-        if self.validatePosition(row, col + 1):
-            possiblePositions.append([row, col + 1])
-        if self.validatePosition(row, col - 1):
-            possiblePositions.append([row, col - 1])
-        if self.validatePosition(row + 1, col):
-            possiblePositions.append([row + 1, col])
-        if self.validatePosition(row + 1, col + 1):
-            possiblePositions.append([row + 1, col + 1])
-        if self.validatePosition(row + 1, col - 1):
-            possiblePositions.append([row + 1, col - 1])
-        return possiblePositions
-
-
-    def getNeighboringPositionsTest(self, row, col):
         possiblePositions = []
         appendPos = possiblePositions.append
         if self.validatePosition(row - 1, col):
@@ -108,48 +78,32 @@ class GameBoard:
         return possiblePositions
 
 
+# Tests written
+# Tried list comprehension, but was slower.
     def getValidBuilds(self, row, col):
-        validBuilds = []
-        neighboringPositions = self.getNeighboringPositions(row, col)
-        for pos in neighboringPositions:
-            if self.verifyValidBuild(pos[0], pos[1]):
-                validBuilds.append(pos)
-        return validBuilds
-
-
-    # Tried list comprehension, but was slower.
-    def getValidBuildsTest(self, row, col):
         validBuilds = []
         appendBuilds = validBuilds.append
         verifyValidBuild = self.verifyValidBuild
-        neighboringPositions = self.getNeighboringPositionsTest(row, col)
+        neighboringPositions = self.getNeighboringPositions(row, col)
         for pos in neighboringPositions:
             if verifyValidBuild(pos[0], pos[1]):
                 appendBuilds(pos)
         return validBuilds
 
 
-    # Tests written
-    def getValidMoves(self, row, col):
-        validMoves = []
-        neighboringPositions = self.getNeighboringPositions(row, col)
-        for pos in neighboringPositions:
-            if self.validateMoveLevel(row, col, pos[0], pos[1]) and not self.workersWillCollide(pos[0], pos[1]):
-                validMoves.append(pos)
-        return validMoves
-
-
+# Tests written
 # Tried list comprehension, but was slower.
-    def getValidMovesTest(self, row, col):
+    def getValidMoves(self, row, col):
         validMoves = []
         appendMoves = validMoves.append
         validateMoveLevel = self.validateMoveLevel
         checkForCollision = self.workersWillCollide
-        neighboringPositions = self.getNeighboringPositionsTest(row, col)
+        neighboringPositions = self.getNeighboringPositions(row, col)
         for pos in neighboringPositions:
             if validateMoveLevel(row, col, pos[0], pos[1]) and not checkForCollision(pos[0], pos[1]):
                 appendMoves(pos)
         return validMoves
+
 
     # Tests written
     def moveWorker(self, player, workerNum, row, col):
