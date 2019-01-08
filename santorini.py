@@ -27,6 +27,18 @@ if __name__ == '__main__':
 	myGameBoard.placeInitialWorker(players[0], 1, 0, 1)
 	myGameBoard.placeInitialWorker(players[1], 0, 1, 0)
 	myGameBoard.placeInitialWorker(players[1], 1, 1, 1)
+
+	# start = time.time()
+	# for i in range(1000000):
+	# 	results = myGameBoard.getAllMoveAndBuildCombosTest(1, 1, 0)
+	# print('TEST TIME: ', time.time() - start)
+    #
+	# start = time.time()
+	# for i in range(1000000):
+	# 	results = myGameBoard.getAllMoveAndBuildCombos(1, 1, 0)
+	# print('REAL TIME: ', time.time() - start)
+
+
 	for turnNum in range(100):
 		print('TURN: ', turnNum)
 		playerNum = turnNum % 2
